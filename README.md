@@ -2,7 +2,7 @@
 
 ## Intro
 
-
+For Webinfo 2019 in USTC - Lab1
 
 ## Info
 
@@ -10,7 +10,16 @@
 
 ## Project Framework
 
-Lucene + Java ？
+Lucene + Java ? (not sure...)
+
+### Build Environment
+
+IntelliJ Idea
+
+### Dependencies
+
++   Lucene 8.2.0
++   JDK 8
 
 ## Design
 
@@ -28,3 +37,10 @@ Lucene + Java ？
 
 [Lucene安装及环境配置](https://blog.csdn.net/u013819513/article/details/79733756)
 
+[Lucene 全文检索入门](https://www.cnblogs.com/cnjavahome/p/9192467.html)
+
+[Lucene系列（一）快速入门](https://segmentfault.com/a/1190000014203843)
+
+[Apache Lucene全局搜索引擎入门教程](https://www.jianshu.com/p/48aad01ebc7c)
+
+[Lucene 五分钟教程 ](http://www.sohu.com/a/196235775_355142)
