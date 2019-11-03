@@ -5,6 +5,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.*;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -47,13 +48,16 @@ public class IndexBuilder {
 	}
 
 	private void init() throws IOException {
-		// save into ramdir, save to disk when builder closed
+		System.out.println("Init indexBuilder... ");
+		System.out.println("Data Path: \"" + dataPath + "\"");
+		System.out.println("Index Path: \"" + indexPath + "\"");
+		// using ramDirectory, save to disk when builder closed
 		ramdir = new RAMDirectory();
-		// FIXME: set proper analyzer e.g. IK
-		analyzer = new StandardAnalyzer();
+		// using IK analyzer
+		analyzer = new IKAnalyzer(true);
 
 		config = new IndexWriterConfig(analyzer);
-		config.setOpenMode(OpenMode.CREATE);
+		config.setOpenMode(OpenMode.CREATE_OR_APPEND);
 		ramwriter = new IndexWriter(ramdir, config);
 
 		reader = new BufferedReader(new FileReader(dataPath));
@@ -90,11 +94,11 @@ public class IndexBuilder {
 		int count = 0;
 		while (CreateDocument()) {
 			count++;
+			if (count % 10 == 0) {
+				System.out.println("Create " + count + " entries...");
+			}
 		}
-		if (count % 10 == 0) {
-			System.out.println("Create " + count + " entries...");
-		}
-		System.out.println("Done! Total count: " + count);
+		System.out.println("Build Index Done! Total count: " + count);
 		ramwriter.commit();
 	}
 
@@ -108,12 +112,17 @@ public class IndexBuilder {
 	}
 
 	public void close() throws IOException {
-		SaveIndex();
-		ramwriter.close();
 		reader.close();
+		ramwriter.close();
+		SaveIndex();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// test this class here
+		IndexBuilder indexBuilder = new IndexBuilder();
+		indexBuilder.setDataPath("path");
+		indexBuilder.setIndexPath("path");
+		indexBuilder.BuildIndex();
+		indexBuilder.close();
 	}
 }

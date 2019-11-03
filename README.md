@@ -10,24 +10,35 @@ For Webinfo 2019 in USTC - Lab1
 
 ## Project Framework
 
-Lucene + Java ? (not sure...)
+Lucene + Java ? (not sure... probably OK ?)
 
 ### Build Environment
 
-IntelliJ Idea
+IntelliJ Idea + JDK 8
 
 ### Dependencies
 
-+   Lucene 8.2.0
 +   JDK 8
++   Lucene 8.2.0
++   IKAnalyzer-5.0.2
+
+### How to use
+
+1.  Add required dependencies to your Java Project
+2.  Set codes in class `Main`
+3.  run `public static void main()` in class `Main`
 
 ## Design
 
+
+
 ## TODOS
 
-+   中文分词
-+   文档排序
-+   查询模块
++   中文分词 √ 采用 IK
++   文档排序 □
++   查询模块 √ 目前可以输出结果到 Terminal
+
+![demo](README.assets/demo.jpg)
 
 ## Discussion
 
