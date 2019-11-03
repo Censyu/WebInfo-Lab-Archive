@@ -4,34 +4,41 @@ import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.store.*;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
 
 public class IndexBuilder {
-	private String indexPath = "lucene-index";
 	private String dataPath = "data";
-	private Directory directory;    // FIXME:
-	private Directory dir;
+	private String indexPath = "lucene-index";
+	private Directory ramdir;
 	private Analyzer analyzer;
 	private IndexWriterConfig config;
-	private IndexWriter indexWriter;
-	private File[] files;
+	private IndexWriter ramwriter;
+	//	private File[] files;
+	private BufferedReader reader;
+	private String[] dataline;
+
 
 	public IndexBuilder() throws IOException {
 		this.init();
 	}
 
-	public IndexBuilder(String path) throws IOException {
-		this.indexPath = path;
+	public IndexBuilder(String dataPath) throws IOException {
+		this.dataPath = dataPath;
 		init();
 	}
 
-	public void setIndexPath(String path){
+	public IndexBuilder(String dataPath, String indexPath) throws IOException {
+		this.dataPath = dataPath;
+		this.indexPath = indexPath;
+		init();
+	}
+
+	public void setIndexPath(String path) {
 		this.indexPath = path;
 	}
 
@@ -39,39 +46,74 @@ public class IndexBuilder {
 		this.dataPath = path;
 	}
 
-	public void init() throws IOException {
-		// FIXME: choose RAM directory or DISK directory
-//		directory = new RAMDirectory();
-		dir = FSDirectory.open(Paths.get(indexPath));
-
+	private void init() throws IOException {
+		// save into ramdir, save to disk when builder closed
+		ramdir = new RAMDirectory();
+		// FIXME: set proper analyzer e.g. IK
 		analyzer = new StandardAnalyzer();
+
 		config = new IndexWriterConfig(analyzer);
-		indexWriter = new IndexWriter(directory, config);
-
 		config.setOpenMode(OpenMode.CREATE);
+		ramwriter = new IndexWriter(ramdir, config);
+
+		reader = new BufferedReader(new FileReader(dataPath));
 	}
 
-	public void ParseData() throws IOException {
-		// TODO: parse data from .csv
+	// Parse one line from data.csv
+	private String[] ParseDataLine() throws IOException {
+		String line = reader.readLine();
+		if (line == null || line.trim().isEmpty()) {
+			return null;
+		} else {
+			return line.split(",");
+		}
 	}
 
-	public void AddDocument() throws IOException {
-		Document doc = new Document();
-		doc.add(new StoredField("id", ""));
-		doc.add(new StoredField("url", ""));
-		doc.add(new TextField("title", "",Field.Store.YES));
-		doc.add(new TextField("content", "",Field.Store.YES));
-
-		indexWriter.addDocument(doc);
+	private Boolean CreateDocument() throws IOException {
+		dataline = ParseDataLine();
+		if (dataline != null) {
+			Document doc = new Document();
+			doc.add(new StoredField("id", dataline[0]));
+			doc.add(new StoredField("url", dataline[1]));
+			doc.add(new TextField("title", dataline[2], Field.Store.YES));
+			doc.add(new TextField("content", dataline[3], Field.Store.YES));
+			ramwriter.addDocument(doc);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public void BuildIndex() throws IOException {
-		// TODO: save to index file
-		indexWriter.commit();
-//		indexWriter.close();
+		// Discard titles in first row
+		ParseDataLine();
+		int count = 0;
+		while (CreateDocument()) {
+			count++;
+		}
+		if (count % 10 == 0) {
+			System.out.println("Create " + count + " entries...");
+		}
+		System.out.println("Done! Total count: " + count);
+		ramwriter.commit();
 	}
 
-	public static void main(String[] args){
+	// FIXME: test this method
+	private void SaveIndex() throws IOException {
+		Directory fsdir = FSDirectory.open(Paths.get(indexPath));
+		IndexWriterConfig fsconfig = new IndexWriterConfig(analyzer);
+		IndexWriter fswriter = new IndexWriter(fsdir, fsconfig);
+		fswriter.addIndexes(ramdir);
+		fswriter.close();
+	}
+
+	public void close() throws IOException {
+		SaveIndex();
+		ramwriter.close();
+		reader.close();
+	}
+
+	public static void main(String[] args) {
 		// test this class here
 	}
 }

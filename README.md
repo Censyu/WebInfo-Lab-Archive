@@ -25,7 +25,6 @@ IntelliJ Idea
 
 ## TODOS
 
-+   .csv 读取
 +   中文分词
 +   文档排序
 +   查询模块
