@@ -2,6 +2,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -24,7 +25,8 @@ public class Searcher {
 	private IndexReader reader;
 	private IndexSearcher searcher;
 	private QueryParser parser;
-	private String fieldName = "title";
+	private MultiFieldQueryParser multiParser;
+	private String fieldName = "";
 	private Query query;
 
 	TopDocs topDocs;
@@ -55,6 +57,8 @@ public class Searcher {
 			searcher = new IndexSearcher(reader);
 			parser = new QueryParser(fieldName, analyzer);
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
+			multiParser = new MultiFieldQueryParser(new String[] {"title", "content"}, analyzer);
+			multiParser.setDefaultOperator(MultiFieldQueryParser.AND_OPERATOR);
 		} catch (IOException e) {
 			System.out.println("Cannot open index files at: \"" + indexPath + "\"");
 			e.printStackTrace();
@@ -64,7 +68,8 @@ public class Searcher {
 	public void Query(String keyword) {
 		try {
 			System.out.println("Searching: \"" + keyword + "\"");
-			query = parser.parse(keyword);
+//			query = parser.parse(keyword);
+			query = multiParser.parse(keyword);
 			topDocs = searcher.search(query, maxSearchNum);
 			System.out.println("Find: " + topDocs.totalHits + " results!");
 			scoreDocs = topDocs.scoreDocs;

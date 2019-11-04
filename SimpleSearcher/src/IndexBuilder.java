@@ -69,7 +69,8 @@ public class IndexBuilder {
 		if (line == null || line.trim().isEmpty()) {
 			return null;
 		} else {
-			return line.split(",");
+			// FIXME: spilt facing too many commas
+			return line.split(",", 4);
 		}
 	}
 
@@ -81,6 +82,12 @@ public class IndexBuilder {
 			doc.add(new StoredField("url", dataline[1]));
 			doc.add(new TextField("title", dataline[2], Field.Store.YES));
 			doc.add(new TextField("content", dataline[3], Field.Store.YES));
+
+			// test here
+//			if(dataline[0].equals("12")) {
+//				System.out.println(dataline[3]);
+//			}
+
 			ramwriter.addDocument(doc);
 			return true;
 		} else {
