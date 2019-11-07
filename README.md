@@ -36,6 +36,8 @@ IntelliJ Idea + JDK 8
 
 +   中文分词 √ 采用 IK
 +   文档排序 □
++   测试格式化输出模块 `Work()` □
++   设置自定义词典 myext.dic □ (用于优化结果)
 +   查询模块 √ 目前可以输出结果到 Terminal
 
 ![demo](README.assets/demo.jpg)
