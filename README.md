@@ -38,6 +38,8 @@ IntelliJ Idea + JDK 8
 +   文档排序 □
 +   测试格式化输出模块 `Work()` □
 +   设置自定义词典 myext.dic □ (用于优化结果)
++   针对测试数据的优化（如设置词典）□
++   引入其他分词工具，如 jieba □ 
 +   查询模块 √ 目前可以输出结果到 Terminal
 
 ![demo](README.assets/demo.jpg)
