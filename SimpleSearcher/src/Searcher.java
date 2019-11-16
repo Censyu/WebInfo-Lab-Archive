@@ -124,11 +124,18 @@ public class Searcher {
 			// | query | query_id |
 			while ((dataline = ParseDataLine()) != null) {
 				count++;
+
+				System.out.println("-----------------------------------");
+				System.out.println("Query: "+ count + ", id: " + dataline[1]);
+
 				searchResults = SearchDocs(dataline[0]);
 				scoreDocs = searchResults.scoreDocs;
 
 				System.out.println("Get: " + searchResults.totalHits + "Hits!");
-
+				if(searchResults.totalHits.value < 20)
+				{
+					System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				}
 				for (ScoreDoc scoreDoc : scoreDocs) {
 					int id = scoreDoc.doc;
 					// write one line
@@ -137,6 +144,8 @@ public class Searcher {
 							searcher.doc(id).get("id") + "\n");
 				}
 			}
+			buffReader.close();
+			buffWriter.close();
 			System.out.println("Finished! Total count:" + count);
 
 		} catch (IOException e) {

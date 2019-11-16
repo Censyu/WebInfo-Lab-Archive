@@ -14,7 +14,7 @@ public class Main {
 
 		// Build index - set dataPath & indexPath
 //		IndexBuilder indexBuilder = new IndexBuilder(
-//				"D:\\mylabs\\weblab\\lab1\\data\\data100.csv");
+//				"D:\\mylabs\\weblab\\lab1\\data\\test_docs.csv");
 //		indexBuilder.BuildIndex();
 //		indexBuilder.close();
 
@@ -25,13 +25,11 @@ public class Main {
 //		searcher.Search("体育委员");
 
 		// Get standard output for lab - set indexPath, queryPath, resultPath
-//		Searcher searcher = new Searcher(
-//				"D:\\mylabs\\weblab\\lab1\\SimpleSearcher\\lucene-index");
-//		searcher.Work("D:\\mylabs\\weblab\\lab1\\data\\test_querys.csv"
-//				, "result.csv");
+//		Work();
 
-		// Test Analyzer
-		TestAnalyzer();
+		// Test
+//		TestAnalyzer();
+		TestSearch();
 
 	}
 
@@ -40,7 +38,7 @@ public class Main {
 		IKAnalyzer analyzer = new IKAnalyzer(true);
 		Scanner in = new Scanner(System.in);
 		String str = in.nextLine();
-		while (!str.equals("OK")){
+		while (!str.equals("OK")) {
 			TokenStream tokenStream = analyzer.tokenStream("content", new StringReader(str));
 			CharTermAttribute attr = tokenStream.addAttribute(CharTermAttribute.class);
 			tokenStream.reset();
@@ -51,7 +49,25 @@ public class Main {
 			tokenStream.close();
 			str = in.nextLine();
 		}
+	}
 
+	private static void TestSearch() {
+		Searcher searcher = new Searcher(
+				"D:\\mylabs\\weblab\\lab1\\SimpleSearcher\\lucene-index");
+		searcher.setfieldName("content");
+		Scanner in = new Scanner(System.in);
+		String str = in.nextLine();
+		while (!str.equals("OK")) {
+			searcher.Search(str);
+			str = in.nextLine();
+		}
+	}
 
+	private static void Work() {
+		Searcher searcher = new Searcher(
+				"D:\\mylabs\\weblab\\lab1\\SimpleSearcher\\lucene-index");
+		searcher.setfieldName("content");
+		searcher.Work("D:\\mylabs\\weblab\\lab1\\data\\test_querys2.csv"
+				, "D:\\mylabs\\weblab\\lab1\\data\\output2.csv");
 	}
 }

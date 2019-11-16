@@ -101,7 +101,7 @@ public class IndexBuilder {
 		int count = 0;
 		while (CreateDocument()) {
 			count++;
-			if (count % 10 == 0) {
+			if (count % 200 == 0) {
 				System.out.println("Create " + count + " entries...");
 			}
 		}
