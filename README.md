@@ -26,7 +26,7 @@ IntelliJ Idea + JDK 8
 
 ### 如何使用本项目代码
 
-1.  克隆本项目代码到本地
+1.  克隆[本项目代码]( https://github.com/Censyu/WebInfo-Lab-Archive )到本地
 2.  向 Java 项目里添加依赖
 3.  在 `Main` 类里设置代码（参见代码注释）
 4.  运行类 `Main` 中的 `public static void main()` 
@@ -37,7 +37,7 @@ IntelliJ Idea + JDK 8
 
 采用 Lucene 引擎 + IK 中文分词工具 (Java 实现)
 
-代码均在 GitHub 上存档
+代码均在 [GitHub]( https://github.com/Censyu/WebInfo-Lab-Archive ) 上存档
 
 ### 中文分词
 
