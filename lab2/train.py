@@ -1,12 +1,14 @@
+import kashgari
 from kashgari.embeddings import BERTEmbedding
-from kashgari.tasks.labeling import BiLSTM_CRF_Model
+# from kashgari.tasks.labeling import BiLSTM_CRF_Model
+from kashgari.tasks.labeling import *
 from kashgari.utils import load_model
 
-train_path = 'data/1train.txt'
-valid_path = 'data/2valid.txt'
-test_path = 'data/1test.txt'
+train_path = 'data/train.txt'
+valid_path = 'data/valid.txt'
+test_path = 'data/test.txt'
 
-model_save_path = 'trained_model/saved_model1'
+model_save_path = 'trained_model/saved_model'
 
 def parse_data(file_path):
     data_x, data_y = [], []
@@ -30,11 +32,20 @@ train_x, train_y = parse_data(train_path)
 validate_x, validate_y = parse_data(valid_path)
 
 # 加载 Bert 预训练模型
-# embedding = BERTEmbedding('chinese_L-12_H-768_A-12', 128)
+# embedding = BERTEmbedding('chinese_L-12_H-768_A-12',
+#                             task=kashgari.LABELING,
+#                             sequence_length=128)
 
 # 使用 BiLSTM - CRF 模型
 # model = BiLSTM_CRF_Model(embedding)
 model = BiLSTM_CRF_Model()
+
+# 其他模型
+# model = BiLSTM_Model()
+# model = BiGRU_Model()
+# model = BiGRU_CRF_Model()
+# model = CNN_LSTM_Model()
+
 
 # 训练 (e, b) = (5+, 30), (10, 50)， (3, 32)*
 epochs = 3

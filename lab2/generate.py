@@ -44,8 +44,8 @@ with open(test_data_path, 'r', encoding='utf-8') as f:
     for line in lines:
         data = json.loads(line)
         textId = data['textId']
-        if textId <= 598:
-            continue
+        # if textId <= 598:
+            # continue
         print("> " + str(textId))
         text = data['originalText']
         slist = text.split('。')

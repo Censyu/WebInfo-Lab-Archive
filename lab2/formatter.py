@@ -1,9 +1,7 @@
 import json
 
-fo = open("2valid.txt", "w")
-with open("data/subtask1_training_afterrevise.txt", 'r', encoding='utf-8') as file:
-# fo = open("train_data_split_with_period.txt", "w")
-# with open("data/subtask1_training_part1.json", 'r', encoding='utf-8') as file:
+fo = open("train_data_split_with_period.txt", "w")
+with open("data/subtask1_training_part1.json", 'r', encoding='utf-8') as file:
     count = 0
     scount = 0
     tag_map = {"实验室检验": "LAB",
